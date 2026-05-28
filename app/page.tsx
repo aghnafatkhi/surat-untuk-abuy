@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Heart } from 'lucide-react';
 import SnoopyMusic from '../components/SnoopyMusic';
@@ -15,6 +15,11 @@ export default function Home() {
   const [stage, setStage] = useState<StageType>(0);
   const [partnerName, setPartnerName] = useState('Ghina Ayundia');
   const [showOpening, setShowOpening] = useState(true);
+
+  // Reset scroll to top on page stage transitions
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [stage]);
 
   return (
     <main className="relative min-h-screen pb-12 pt-6 overflow-x-hidden flex flex-col justify-between vintage-paper-texture text-warm-ink">
