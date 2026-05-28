@@ -178,10 +178,10 @@ export default function Home() {
 
               <motion.button
                 onClick={() => {
-                  setShowOpening(false);
                   if (typeof (window as any).playSnoopyMusic === 'function') {
                     (window as any).playSnoopyMusic();
                   }
+                  setShowOpening(false);
                 }}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}

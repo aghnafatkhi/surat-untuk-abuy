@@ -24,9 +24,10 @@ const progressions = [
 
 export default function SnoopyMusic() {
   const [isPlaying, setIsPlaying] = useState(false);
+  const [useFallback, setUseFallback] = useState(false);
   const audioContextRef = useRef<AudioContext | null>(null);
   const intervalIdRef = useRef<NodeJS.Timeout | null>(null);
-  const customAudioRef = useRef<HTMLAudioElement | null>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
 
   const playSynthesizedArpeggio = () => {
     if (!audioContextRef.current) return;
@@ -97,46 +98,47 @@ export default function SnoopyMusic() {
 
   useEffect(() => {
     let active = true;
-
-    // Menyiapkan pemutar audio eksternal kustom (music.mp3)
-    const audio = new Audio('/images/music.mp3');
-    audio.loop = true;
-    audio.volume = 0.55;
-    customAudioRef.current = audio;
-
+    const currentAudio = audioRef.current;
+ 
     const startAudio = () => {
       if (!active) return;
       
-      // Coba putar musik eksternal terlebih dahulu
-      audio.play()
-        .then(() => {
+      if (!useFallback) {
+        const audio = currentAudio;
+        if (audio) {
+          audio.muted = false;
+          audio.play()
+            .then(() => {
+              setIsPlaying(true);
+              active = false;
+              window.removeEventListener('click', startAudio);
+              window.removeEventListener('touchstart', startAudio);
+            })
+            .catch((err) => {
+              console.warn("Retrying MP3 player on next tap:", err);
+            });
+        }
+      } else {
+        try {
+          if (!audioContextRef.current) {
+            const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
+            if (AudioCtx) {
+              audioContextRef.current = new AudioCtx();
+            }
+          }
+          
           setIsPlaying(true);
+          setTimeout(() => {
+            playSynthesizedArpeggio();
+          }, 50);
+
           active = false;
           window.removeEventListener('click', startAudio);
           window.removeEventListener('touchstart', startAudio);
-        })
-        .catch(() => {
-          // Fallback ke synthesizer jika /music.mp3 gagal atau tidak ada
-          try {
-            if (!audioContextRef.current) {
-              const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
-              if (AudioCtx) {
-                audioContextRef.current = new AudioCtx();
-              }
-            }
-            
-            setIsPlaying(true);
-            setTimeout(() => {
-              playSynthesizedArpeggio();
-            }, 50);
-
-            active = false;
-            window.removeEventListener('click', startAudio);
-            window.removeEventListener('touchstart', startAudio);
-          } catch (e) {
-            console.error("Gagal menjalankan melodi:", e);
-          }
-        });
+        } catch (e) {
+          console.error("Gagal menjalankan melodi:", e);
+        }
+      }
     };
 
     (window as any).playSnoopyMusic = () => {
@@ -155,11 +157,26 @@ export default function SnoopyMusic() {
       if (intervalIdRef.current) {
         clearInterval(intervalIdRef.current);
       }
-      if (customAudioRef.current) {
-        customAudioRef.current.pause();
+      if (currentAudio) {
+        currentAudio.pause();
       }
     };
-  }, []);
+  }, [useFallback]);
 
-  return null;
+  const handleAudioError = () => {
+    console.warn("music.mp3 failed to load. Falling back to synth audio.");
+    setUseFallback(true);
+  };
+
+  return (
+    <audio
+      ref={audioRef}
+      src="/images/music.mp3"
+      loop
+      playsInline
+      preload="auto"
+      onError={handleAudioError}
+      style={{ display: 'none' }}
+    />
+  );
 }
