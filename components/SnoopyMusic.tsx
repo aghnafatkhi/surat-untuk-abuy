@@ -139,6 +139,10 @@ export default function SnoopyMusic() {
         });
     };
 
+    (window as any).playSnoopyMusic = () => {
+      startAudio();
+    };
+
     window.addEventListener('click', startAudio);
     window.addEventListener('touchstart', startAudio);
 
@@ -146,6 +150,7 @@ export default function SnoopyMusic() {
       active = false;
       window.removeEventListener('click', startAudio);
       window.removeEventListener('touchstart', startAudio);
+      delete (window as any).playSnoopyMusic;
       
       if (intervalIdRef.current) {
         clearInterval(intervalIdRef.current);

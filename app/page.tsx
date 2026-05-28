@@ -177,13 +177,22 @@ export default function Home() {
               <div className="w-12 h-[2px] bg-warm-rose/30 my-4 rounded-full"></div>
 
               <motion.button
-                onClick={() => setShowOpening(false)}
+                onClick={() => {
+                  setShowOpening(false);
+                  if (typeof (window as any).playSnoopyMusic === 'function') {
+                    (window as any).playSnoopyMusic();
+                  }
+                }}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 className="w-full flex items-center justify-center gap-2 bg-warm-rose hover:bg-warm-darkrose text-white font-mono font-bold py-3 px-5 rounded-md shadow-[0_3px_0_#3E342B] active:shadow-none hover:translate-y-[1px] active:translate-y-[3px] border-2 border-[#3E342B] transition-all text-[11px] cursor-pointer"
               >
                 <span>UDAH AKU REKAMM</span>
               </motion.button>
+
+              <p className="text-[10px] font-mono text-warm-muted/75 text-center mt-3 max-w-xs leading-normal">
+                ⚠️ Pastikan HP tidak dlm mode hening (silent) & volume sudah dinaikkan yaa!
+              </p>
 
               <span className="text-[8px] font-mono text-warm-muted/50 mt-4 uppercase tracking-widest">
                 murni dari hati - aghna
