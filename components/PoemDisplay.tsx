@@ -243,7 +243,7 @@ export default function PoemDisplay({ partnerName, onNext, onBack }: PoemDisplay
         className="mt-6 w-full flex items-center justify-center gap-2 bg-warm-rose hover:bg-warm-darkrose text-white font-mono tracking-wide rounded py-3 shadow-[0_3px_0_#3E342B] active:shadow-none hover:translate-y-[1px] active:translate-y-[3px] border-2 border-warm-ink transition-all text-sm cursor-pointer animate-pulse-heart"
       >
         <Camera className="w-4 h-4" />
-        <span>BUKA ALBUM FOTO KITA</span>
+        <span>LANJUT</span>
       </motion.button>
       
       {/* Simple Skip trigger without AI-like flow */}

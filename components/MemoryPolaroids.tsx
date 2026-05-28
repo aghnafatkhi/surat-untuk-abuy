@@ -55,7 +55,6 @@ export default function MemoryPolaroids({ partnerName, onNext, onBack }: MemoryP
   ]);
 
   const [flippedCardId, setFlippedCardId] = useState<number | null>(null);
-  const [dragged, setDragged] = useState(false);
 
   const fileInputRefs = useRef<{ [key: number]: HTMLInputElement | null }>({});
   const [dragOverCardId, setDragOverCardId] = useState<number | null>(null);
@@ -98,7 +97,6 @@ export default function MemoryPolaroids({ partnerName, onNext, onBack }: MemoryP
   };
 
   const handleCardClick = (id: number) => {
-    if (dragged) return;
     setFlippedCardId(prev => prev === id ? null : id);
   };
 
@@ -130,7 +128,7 @@ export default function MemoryPolaroids({ partnerName, onNext, onBack }: MemoryP
           Kisah Kasih di Sekolah
         </h2>
         <p className="text-warm-muted text-xs md:text-sm mt-2 font-mono leading-relaxed">
-          Kamu bisa menggeser kartu di bawah ini untuk melihat tata letak yang berbeda, klik untuk membaca catatan manis di belakangnya, atau klik area kosong untuk mengunggah foto kita.
+          Klik foto untuk membaca catatan manis di belakangnya, atau klik area kosong untuk mengunggah foto kita.
         </p>
       </div>
 
@@ -142,7 +140,7 @@ export default function MemoryPolaroids({ partnerName, onNext, onBack }: MemoryP
       {/* Solid background canvas desktop surface */}
       <div 
         ref={containerRef}
-        className="relative w-full min-h-[460px] md:min-h-[500px] bg-warm-card border-2 border-warm-ink rounded p-4 md:p-6 flex flex-wrap justify-center items-center gap-6 cursor-grab active:cursor-grabbing overflow-hidden"
+        className="relative w-full min-h-[460px] md:min-h-[500px] bg-warm-card border-2 border-warm-ink rounded p-4 md:p-6 flex flex-wrap justify-center items-center gap-6 overflow-hidden"
       >
         <AnimatePresence>
           {cards.map((card, idx) => {
@@ -154,20 +152,13 @@ export default function MemoryPolaroids({ partnerName, onNext, onBack }: MemoryP
             return (
               <motion.div
                 key={card.id}
-                drag
-                dragConstraints={containerRef}
-                dragElastic={0.15}
-                onDragStart={() => setDragged(true)}
-                onDragEnd={() => {
-                  setTimeout(() => setDragged(false), 50);
-                }}
                 initial={{ opacity: 0, scale: 0.95, y: 60, rotate: card.tilt * 2 }}
                 animate={{ opacity: 1, scale: 1, y: 0, rotate: card.tilt }}
                 transition={{ 
-                  type: 'spring', 
-                  stiffness: 85, 
-                  damping: 15,
-                  delay: idx * 0.15 
+                   type: 'spring', 
+                   stiffness: 85, 
+                   damping: 15,
+                   delay: idx * 0.15 
                 }}
                 whileHover={{ scale: 1.02, zIndex: 40 }}
                 className="relative w-64 md:w-72 h-[340px] cursor-pointer"
@@ -305,7 +296,7 @@ export default function MemoryPolaroids({ partnerName, onNext, onBack }: MemoryP
         onClick={onNext}
         className="mt-6 w-full max-w-sm flex items-center justify-center gap-2 bg-warm-rose hover:bg-warm-darkrose text-white font-mono tracking-wide rounded py-3 shadow-[0_3px_0_#3E342B] active:shadow-none hover:translate-y-[1px] active:translate-y-[3px] border-2 border-warm-ink transition-all text-sm cursor-pointer animate-pulse-heart"
       >
-        <span>LANJUT KE KEJUTAN AKHIR</span>
+        <span>LANJUT</span>
         <ArrowRight className="w-4 h-4 text-white" />
       </motion.button>
     </div>
