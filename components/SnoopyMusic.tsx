@@ -171,7 +171,7 @@ export default function SnoopyMusic() {
   return (
     <audio
       ref={audioRef}
-      src="/images/music.mp3"
+      src="https://files.catbox.moe/docbx5.mp3"
       loop
       playsInline
       preload="auto"
