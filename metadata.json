@@ -1,0 +1,6 @@
+{
+  "name": "Surat Cinta Snoopy",
+  "description": "Sebuah website romantis interaktif bertema Snoopy berisi surat, puisi, foto kenangan, dan buket bunga spesial untuk pacar.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
